@@ -1,8 +1,5 @@
-build
+.gradle
+.idea
 target
-.idea/
-project/
-.classpath
-.project
-.settings
-.cache
+out
+build
