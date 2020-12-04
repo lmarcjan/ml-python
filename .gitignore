@@ -1,5 +1,5 @@
-.gradle
 .idea
+venv
 target
 out
 build
