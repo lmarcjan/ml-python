@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 import pandas as pd
 
 
@@ -12,6 +11,6 @@ def load_normal_df():
 
 
 if __name__ == '__main__':
-    normal = load_normal_df()
-    sns.displot(normal, kind="kde", fill=True)
+    df = load_normal_df()
+    df.plot(kind="kde")
     plt.show()
