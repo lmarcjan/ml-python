@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 
 import data as data
 
@@ -11,4 +12,5 @@ def load_housing_df():
 
 if __name__ == '__main__':
     housing = load_housing_df()
-    housing.info()
+    housing.hist(bins=50, figsize=(20, 15))
+    plt.show()
