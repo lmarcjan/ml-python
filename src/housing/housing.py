@@ -17,7 +17,7 @@ def plot_long_lat(df):
 
 def plot_corr_matrix(df):
     scatter_matrix(df[["median_house_value", "median_income", "total_rooms", "housing_median_age"]],
-                   diagonal="kde");
+                   diagonal="kde")
     plt.show()
 
 
