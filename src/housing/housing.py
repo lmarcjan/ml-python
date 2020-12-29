@@ -10,9 +10,9 @@ def load_housing_df():
     return pd.read_csv(data_path)
 
 
-def plot_long_lat(df):
-    df.plot(kind="scatter", x="longitude", y="latitude")
-    plt.show()
+def print_corr_matrix(df):
+    corr_matrix = df.corr()
+    print(corr_matrix["median_house_value"].sort_values(ascending=False))
 
 
 def plot_corr_matrix(df):
@@ -21,11 +21,12 @@ def plot_corr_matrix(df):
     plt.show()
 
 
-def print_corr_matrix(df):
-    corr_matrix = df.corr()
-    print(corr_matrix["median_house_value"].sort_values(ascending=False))
+def plot_long_lat(df):
+    df.plot(kind="scatter", x="longitude", y="latitude", alpha=0.1,
+            c="median_house_value", cmap=plt.get_cmap("jet"))
+    plt.show()
 
 
 if __name__ == '__main__':
     df = load_housing_df()
-    plot_corr_matrix(df)
+    plot_long_lat(df)
