@@ -1,8 +1,10 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
+from numpy.ma import sqrt
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
 from sklearn.pipeline import Pipeline
 
 import data as data
@@ -32,21 +34,31 @@ def plot_long_lat(housing):
 
 
 def fit_housing(housing_prepared, housing_labels):
-    lin_reg = LinearRegression()
-    lin_reg.fit(housing_prepared, housing_labels)
-    return lin_reg
+    model = RandomForestRegressor(n_estimators=10, random_state=42)
+    model.fit(housing_prepared, housing_labels)
+    return model
 
 
 def prepare_housing(housing):
-    housing_num = housing.drop('ocean_proximity', inplace=False, axis=1)
+    housing_prepared = housing.copy()
+    housing_prepared = housing_prepared.drop("median_house_value", axis=1)
+    housing_prepared = housing_prepared.drop('ocean_proximity', axis=1)
     num_pipeline = Pipeline([
         ('imputer', SimpleImputer(strategy="median")),
     ])
-    return num_pipeline.fit_transform(housing_num)
+    return num_pipeline.fit_transform(housing_prepared)
 
 
 if __name__ == '__main__':
     housing = load_housing()
+    housing_labels = housing["median_house_value"].copy()
     housing_prepared = prepare_housing(housing)
-    model = fit_housing(housing_prepared, housing["median_house_value"])
-    model.predict(housing_prepared.sample(n=10, random_state=1))
+    model = fit_housing(housing_prepared, housing_labels)
+    housing_predictions = model.predict(housing_prepared[:10])
+    housing_labels = housing_labels[:10]
+    print(housing_labels)
+    print(housing_predictions)
+    mse = mean_squared_error(housing_labels, housing_predictions)
+    rmse = sqrt(mse)
+    print(rmse)
+
