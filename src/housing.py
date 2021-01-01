@@ -40,9 +40,10 @@ def fit_housing(housing_prepared, housing_labels):
 
 
 def prepare_housing(housing):
-    housing_prepared = housing.copy()
-    housing_prepared = housing_prepared.drop("median_house_value", axis=1)
-    housing_prepared = housing_prepared.drop('ocean_proximity', axis=1)
+    housing_prepared = housing\
+        .copy()\
+        .drop("median_house_value", axis=1)\
+        .drop('ocean_proximity', axis=1)
     num_pipeline = Pipeline([
         ('imputer', SimpleImputer(strategy="median")),
     ])
