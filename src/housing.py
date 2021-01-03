@@ -5,7 +5,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 
-from df_util import load_df
+from util.df_util import load_df
 
 
 def prepare_housing(housing):

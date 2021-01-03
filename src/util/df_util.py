@@ -2,10 +2,8 @@ import os
 
 import matplotlib.pyplot as plt
 from pandas.plotting import scatter_matrix
-
 import data
 import pandas as pd
-
 
 def load_df(name):
     data_path = os.path.join(data.__path__[0], name)
