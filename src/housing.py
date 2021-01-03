@@ -1,4 +1,4 @@
-from numpy.ma import sqrt
+import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_squared_error
@@ -37,8 +37,8 @@ if __name__ == '__main__':
     model = housing_fit(housing_prepared, housing_labels)
     housing_predictions = model.predict(housing_prepared[:10])
     housing_labels = housing_labels[:10]
-    print(housing_labels.to_numpy())
+    print(np.array(housing_labels))
     print(housing_predictions)
     mse = mean_squared_error(housing_labels, housing_predictions)
-    rmse = sqrt(mse)
+    rmse = np.sqrt(mse)
     print(rmse)
