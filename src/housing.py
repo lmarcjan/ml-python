@@ -35,8 +35,9 @@ if __name__ == '__main__':
     housing_labels = housing["median_house_value"].copy()
     housing_prepared = prepare_housing(housing)
     model = housing_fit(housing_prepared, housing_labels)
-    housing_predictions = model.predict(housing_prepared[:10])
-    housing_labels = housing_labels[:10]
+    predictions_indices = np.random.choice(len(housing_prepared), 100)
+    housing_predictions = model.predict(housing_prepared[predictions_indices])
+    housing_labels = housing_labels[predictions_indices]
     print(np.array(housing_labels))
     print(housing_predictions)
     mse = mean_squared_error(housing_labels, housing_predictions)
