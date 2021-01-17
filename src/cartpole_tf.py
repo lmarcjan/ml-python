@@ -1,4 +1,4 @@
-from util.gym_util import plot_animation
+from util.plot_util import plot_animation
 import gym
 import numpy as np
 import tensorflow.compat.v1 as tf
