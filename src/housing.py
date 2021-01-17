@@ -24,9 +24,9 @@ def plot_long_lat(housing):
     plt.show()
 
 
-def housing_fit(housing_prepared, housing_labels):
+def housing_fit(housing_arr, housing_labels):
     model = RandomForestRegressor(n_estimators=10, random_state=42)
-    model.fit(housing_prepared, housing_labels)
+    model.fit(housing_arr, housing_labels)
     return model
 
 
@@ -43,8 +43,8 @@ def housing_compare(housing_arr, housing_labels, model, n):
 
 if __name__ == '__main__':
     housing_df = load_df('housing.csv')
+    housing_arr = prepare_housing(housing_df)
     housing_labels = housing_df["median_house_value"].copy()
-    housing_prepared = prepare_housing(housing_df)
-    model = housing_fit(housing_prepared, housing_labels)
-    housing_compare(housing_prepared, housing_labels, model, 10)
+    model = housing_fit(housing_arr, housing_labels)
+    housing_compare(housing_arr, housing_labels, model, 10)
 
