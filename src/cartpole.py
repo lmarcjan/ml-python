@@ -4,18 +4,26 @@ from util.gym_util import plot_animation
 frames = []
 env = gym.make('CartPole-v0')
 
-if __name__ == '__main__':
+
+def action(obs):
+    position, velocity, angle, angular_velocity = obs
+    if angle < 0:
+        return 0
+    else:
+        return 1
+
+
+def render():
     obs = env.reset()
     while True:
         img = env.render(mode="rgb_array")
         frames.append(img)
-        position, velocity, angle, angular_velocity = obs
-        if angle < 0:
-            action = 0
-        else:
-            action = 1
-        obs, reward, done, info = env.step(action)
+        obs, reward, done, info = env.step(action(obs))
         if done:
             break
-    video = plot_animation(frames)
+    plot_animation(frames)
     env.close()
+
+
+if __name__ == '__main__':
+    render()
