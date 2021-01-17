@@ -3,6 +3,7 @@ from matplotlib import animation
 
 
 def plot_animation(frames, repeat=False, interval=40):
+    print("Frames: {}".format(len(frames)))
     plt.close()
     fig = plt.figure()
     patch = plt.imshow(frames[0])

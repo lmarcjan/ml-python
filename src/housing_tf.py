@@ -18,7 +18,7 @@ if __name__ == '__main__':
     hidden = tf.layers.dense(X, n_hidden, activation=tf.nn.elu, kernel_initializer=initializer)
     outputs = tf.layers.dense(hidden, n_outputs, activation=tf.nn.sigmoid, kernel_initializer=initializer)
 
+    init = tf.global_variables_initializer()
     with tf.Session() as sess:
-        init = tf.global_variables_initializer()
-        sess.run(init)
+        init.run()
         sess.run([X, y], feed_dict={X: housing_arr, y: housing_labels})
