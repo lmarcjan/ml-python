@@ -30,16 +30,21 @@ def housing_fit(housing_prepared, housing_labels):
     return model
 
 
-if __name__ == '__main__':
-    housing = load_df('housing.csv')
-    housing_labels = housing["median_house_value"].copy()
-    housing_prepared = prepare_housing(housing)
-    model = housing_fit(housing_prepared, housing_labels)
-    predictions_indices = np.random.choice(len(housing_prepared), 100)
-    housing_predictions = model.predict(housing_prepared[predictions_indices])
-    housing_labels = housing_labels[predictions_indices]
+def housing_compare(housing_arr, housing_labels, model, n):
+    predictions_indices = np.random.choice(len(housing_arr), n)
+    housing_predictions = model.predict(housing_arr[predictions_indices])
+    predictions_labels = housing_labels[predictions_indices]
     print(np.array(housing_labels))
     print(housing_predictions)
-    mse = mean_squared_error(housing_labels, housing_predictions)
+    mse = mean_squared_error(predictions_labels, housing_predictions)
     rmse = np.sqrt(mse)
     print(rmse)
+
+
+if __name__ == '__main__':
+    housing_df = load_df('housing.csv')
+    housing_labels = housing_df["median_house_value"].copy()
+    housing_prepared = prepare_housing(housing_df)
+    model = housing_fit(housing_prepared, housing_labels)
+    housing_compare(housing_prepared, housing_labels, model, 10)
+
