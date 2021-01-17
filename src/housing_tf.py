@@ -15,7 +15,6 @@ if __name__ == '__main__':
     y = tf.placeholder(tf.int32, shape=None, name="y")
     hidden = tf.layers.dense(X, n_hidden, activation=tf.nn.elu, kernel_initializer=initializer)
     outputs = tf.layers.dense(hidden, n_outputs, activation=tf.nn.sigmoid, kernel_initializer=initializer)
-
     with tf.Session() as sess:
         init = tf.global_variables_initializer()
         sess.run(init)
