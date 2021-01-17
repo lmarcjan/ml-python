@@ -1,5 +1,5 @@
 import gym
-from util.gym_util import plot_animation
+from util.plot_util import plot_animation
 
 frames = []
 env = gym.make('CartPole-v0')
@@ -13,9 +13,9 @@ def naive_policy(obs):
         return 1
 
 
-def render_policy():
+def render_policy(n_max_steps=1000):
     obs = env.reset()
-    while True:
+    for step in range(n_max_steps):
         img = env.render(mode="rgb_array")
         frames.append(img)
         action_val = naive_policy(obs)
