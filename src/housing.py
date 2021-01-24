@@ -29,9 +29,9 @@ def housing_fit(housing_prep, housing_labels):
     return model
 
 
-def housing_compare(housing_prep, housing_labels, model, n):
-    predictions_indices = np.random.choice(len(housing_prep), n)
-    housing_predictions = model.predict(housing_prep[predictions_indices])
+def housing_compare(housing_num, housing_labels, model, n):
+    predictions_indices = np.random.choice(len(housing_num), n)
+    housing_predictions = model.predict(housing_num[predictions_indices])
     predictions_labels = housing_labels[predictions_indices]
     print(np.array(housing_labels))
     print(housing_predictions)

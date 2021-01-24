@@ -47,7 +47,6 @@ if __name__ == '__main__':
 
     cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(labels=y, logits=logits)
     optimizer = tf.train.AdamOptimizer(learning_rate)
-
     training_op = optimizer.minimize(cross_entropy)
 
     init = tf.global_variables_initializer()
@@ -60,7 +59,7 @@ if __name__ == '__main__':
             for env_index, env in enumerate(envs):
                 obs, reward, done, info = env.step(action_val[env_index][0])
                 observations[env_index] = obs if not done else env.reset()
-        saver.save(sess, "./model/my_policy_net_basic.ckpt")
+        saver.save(sess, "./model/cartpole_tf.ckpt")
 
     frames = render_policy_net("model/my_policy_net_basic.ckpt", action, X)
     plot_animation(frames)
