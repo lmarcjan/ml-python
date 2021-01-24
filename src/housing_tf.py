@@ -1,24 +1,35 @@
-from housing import prepare_housing
+from housing_df import prepare_housing, num_housing
 from util.df_util import load_df
+import numpy as np
+from sklearn.preprocessing import StandardScaler
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 
+n_epochs = 1000
+learning_rate = 0.01
+
 if __name__ == '__main__':
     housing_df = load_df('housing.csv')
-    housing_num = prepare_housing(housing_df)
+    housing_num = num_housing(prepare_housing(housing_df))
     housing_labels = housing_df["median_house_value"].copy()
+    m, n = housing_num.shape
 
-    n_inputs = int(housing_num.shape[1])
-    n_hidden = 5 * n_inputs
-    n_outputs = 1
+    scaler = StandardScaler()
+    scaled_housing_data = scaler.fit_transform(housing_num)
+    scaled_housing_data_plus_bias = np.c_[np.ones((m, 1)), scaled_housing_data]
 
-    initializer = tf.variance_scaling_initializer()
-    X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
-    y = tf.placeholder(tf.int32, shape=None, name="y")
-    hidden = tf.layers.dense(X, n_hidden, activation=tf.nn.elu, kernel_initializer=initializer)
-    outputs = tf.layers.dense(hidden, n_outputs, activation=tf.nn.sigmoid, kernel_initializer=initializer)
+    X = tf.constant(scaled_housing_data_plus_bias, dtype=tf.float32, name="X")
+    y = tf.constant(housing_num.reshape(-1, 1), dtype=tf.float32, name="y")
+    theta = tf.Variable(tf.random_uniform([n+1, 1], -1.0, 1.0), name="theta")
+    y_pred = tf.matmul(X, theta, name="prognozy")
+    error = y_pred - y
+    mse = tf.reduce_mean(tf.square_error(error), name="mse")
+    gradients = 2/m * tf.matmul(tf.transpose(X), error)
+    training_op = tf.assign(theta, theta - learning_rate * gradients)
 
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
         init.run()
-        sess.run([X, y], feed_dict={X: housing_num, y: housing_labels})
+        for epoch in range(n_epochs):
+            print("Epoka", epoch, "MSE=", mse.eval())
+        sess.run(training_op)
