@@ -5,10 +5,10 @@ tf.disable_v2_behavior()
 
 if __name__ == '__main__':
     housing_df = load_df('housing.csv')
-    housing_arr = prepare_housing(housing_df)
+    housing_num = prepare_housing(housing_df)
     housing_labels = housing_df["median_house_value"].copy()
 
-    n_inputs = int(housing_arr.shape[1])
+    n_inputs = int(housing_num.shape[1])
     n_hidden = 5 * n_inputs
     n_outputs = 1
 
@@ -21,4 +21,4 @@ if __name__ == '__main__':
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
         init.run()
-        sess.run([X, y], feed_dict={X: housing_arr, y: housing_labels})
+        sess.run([X, y], feed_dict={X: housing_num, y: housing_labels})
