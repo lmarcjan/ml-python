@@ -1,17 +1,26 @@
 from housing import prepare_housing, num_housing
 from util.df_util import load_df
 import numpy as np
+from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
+
 
 n_epochs = 1000
 learning_rate = 0.01
 
 
-def housing_compare(model_path):
+def housing_compare(model_path, y_pred, housing_num, housing_labels, samples):
+    indices = np.random.choice(len(housing_num), samples)
+    labels = housing_labels[indices]
+    print(np.array(labels))
     with tf.Session() as sess:
         saver.restore(sess, model_path)
+        housing_pred = y_pred.eval(feed_dict={X: housing_num[indices]})
+        print(housing_pred)
+        rmse = np.sqrt(mean_squared_error(labels, housing_pred))
+        print(rmse)
 
 
 if __name__ == '__main__':
@@ -45,4 +54,4 @@ if __name__ == '__main__':
             sess.run(training_op)
         saver.save(sess, "./model/housing_tf.ckpt")
 
-    housing_compare("./model/housing_tf.ckpt")
+    housing_compare("./model/housing_tf.ckpt", y_pred, housing_num, housing_labels, 10)

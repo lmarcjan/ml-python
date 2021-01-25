@@ -29,13 +29,13 @@ def housing_fit(housing_prep, housing_labels):
     return model
 
 
-def housing_compare(housing_num, housing_labels, model, n):
-    predictions_indices = np.random.choice(len(housing_num), n)
-    housing_predictions = model.predict(housing_num[predictions_indices])
-    predictions_labels = housing_labels[predictions_indices]
-    print(np.array(housing_labels))
-    print(housing_predictions)
-    rmse = np.sqrt(mean_squared_error(predictions_labels, housing_predictions))
+def housing_compare(housing_num, housing_labels, model, samples):
+    indices = np.random.choice(len(housing_num), samples)
+    labels = housing_labels[indices]
+    print(np.array(labels))
+    housing_pred = model.predict(housing_num[indices])
+    print(housing_pred)
+    rmse = np.sqrt(mean_squared_error(labels, housing_pred))
     print(rmse)
 
 
