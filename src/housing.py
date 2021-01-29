@@ -33,7 +33,8 @@ def housing_compare(housing_num, housing_labels, model, samples):
     indices = np.random.choice(len(housing_num), samples)
     labels = housing_labels[indices]
     print(np.array(labels))
-    housing_pred = model.predict(housing_num[indices])
+    samples = housing_num[indices]
+    housing_pred = model.predict(samples)
     print(housing_pred)
     rmse = np.sqrt(mean_squared_error(labels, housing_pred))
     print(rmse)
