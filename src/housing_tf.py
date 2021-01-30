@@ -17,12 +17,12 @@ def housing_compare(model_path, theta, housing_num, housing_labels, samples):
     print(np.array(labels))
     with tf.Session() as sess:
         saver.restore(sess, model_path)
-        best_theta = theta.eval()
+        best_theta = theta.eval().flatten()
         samples = housing_num[indices]
         housing_pred = []
         for sample in samples:
-            prod = np.multiply(best_theta[1:9].flatten(), sample.reshape(8, 1).flatten())
-            housing_pred.append(sum(prod))
+            y = best_theta[0] + sum(np.multiply(best_theta[1:9], sample.reshape(8, 1).flatten()))
+            housing_pred.append(y)
         print(housing_pred)
         rmse = np.sqrt(mean_squared_error(labels, housing_pred))
         print(rmse)
