@@ -21,8 +21,8 @@ def housing_compare(model_path, theta, housing_num, housing_labels, samples):
         samples = housing_num[indices]
         housing_pred = []
         for sample in samples:
-            y = best_theta[0] + sum(np.multiply(best_theta[1:9], sample.reshape(8, 1).flatten()))
-            housing_pred.append(y)
+            y_pred = best_theta[0] + np.dot(best_theta[1:9], sample.flatten())
+            housing_pred.append(y_pred)
         print(housing_pred)
         rmse = np.sqrt(mean_squared_error(labels, housing_pred))
         print(rmse)
