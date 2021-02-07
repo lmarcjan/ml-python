@@ -61,5 +61,5 @@ if __name__ == '__main__':
                 observations[env_index] = obs if not done else env.reset()
         saver.save(sess, "./model/cartpole_tf.ckpt")
 
-    frames = render_policy_net("model/my_policy_net_basic.ckpt", action, X)
+    frames = render_policy_net("./model/cartpole_tf.ckpt", action, X)
     plot_animation(frames)
