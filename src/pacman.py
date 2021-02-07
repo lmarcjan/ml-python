@@ -1,7 +1,7 @@
 import gym
 import matplotlib.pyplot as plt
 
-from util.gym_util import plot_animation
+from util.plot_util import plot_animation
 
 frames = []
 n_max_steps = 1000
