@@ -4,7 +4,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_squared_error
 
 
-def fill_dm(X):
+def create_dm(X):
     return SimpleImputer(strategy="median").fit_transform(X)
 
 
