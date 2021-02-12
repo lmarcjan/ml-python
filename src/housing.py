@@ -1,5 +1,6 @@
 from util.dm_util import fit_dm, compare_dm, fill_dm
-from util.df_util import load_df, drop_df, plot_long_lat
+from util.df_util import load_df, drop_df
+from util.plot_util import plot_long_lat
 
 if __name__ == '__main__':
     housing_df = load_df('housing.csv')

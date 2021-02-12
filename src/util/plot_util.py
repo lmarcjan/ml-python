@@ -2,6 +2,12 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 
+def plot_long_lat(df, y_name):
+    df.plot(kind="scatter", x="longitude", y="latitude", alpha=0.1,
+            c=y_name, cmap=plt.get_cmap("jet"))
+    plt.show()
+
+
 def plot_animation(frames, repeat=False, interval=40):
     print("Frames: {}".format(len(frames)))
     plt.close()
