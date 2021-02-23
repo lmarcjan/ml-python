@@ -4,17 +4,17 @@ from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_squared_error
 
 
-def create_dm(X):
+def create_dx(X):
     return SimpleImputer(strategy="median").fit_transform(X)
 
 
-def fit_dm(X, y):
+def fit_dx(X, y):
     model = RandomForestRegressor(n_estimators=10, random_state=42)
     model.fit(X, y)
     return model
 
 
-def compare_dm(X, y, model, sample_size):
+def compare_dx(X, y, model, sample_size):
     indices = np.random.choice(len(X), sample_size)
     labels = y[indices]
     print("Labels: " + str(np.array(labels)))

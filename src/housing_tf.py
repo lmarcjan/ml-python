@@ -3,7 +3,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 import tensorflow.compat.v1 as tf
 
-from util.dm_util import create_dm
+from util.dm_util import create_dx
 from util.df_util import load_df, drop_df
 
 tf.disable_v2_behavior()
@@ -32,7 +32,7 @@ def housing_compare(model_path, theta, housing_X, housing_y, sample_size):
 
 if __name__ == '__main__':
     housing_df = load_df('housing.csv')
-    housing_X = create_dm(drop_df(housing_df, ["median_house_value", "ocean_proximity"]))
+    housing_X = create_dx(drop_df(housing_df, ["median_house_value", "ocean_proximity"]))
     housing_y = housing_df["median_house_value"].copy()
     m, n = housing_X.shape
 
