@@ -32,7 +32,7 @@ def housing_compare(model_path, theta, housing_X, housing_y, sample_size):
 
 if __name__ == '__main__':
     housing_df = load_df('housing.csv')
-    housing_X = create_dx(drop_df(housing_df, ["median_house_value", "ocean_proximity"]))
+    housing_X = create_dx(drop_df(housing_df, ["median_house_value"]))
     housing_y = housing_df["median_house_value"].copy()
     m, n = housing_X.shape
 

@@ -1,4 +1,3 @@
-from sklearn.ensemble import RandomForestRegressor
 import numpy as np
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_squared_error
@@ -6,12 +5,6 @@ from sklearn.metrics import mean_squared_error
 
 def create_dx(X):
     return SimpleImputer(strategy="median").fit_transform(X)
-
-
-def fit_dx(X, y):
-    model = RandomForestRegressor(n_estimators=10, random_state=42)
-    model.fit(X, y)
-    return model
 
 
 def compare_dx(X, y, model, sample_size):
