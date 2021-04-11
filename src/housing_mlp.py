@@ -1,13 +1,13 @@
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.neural_network import MLPRegressor
 
 from util.df_util import compare, complete
 from util.df_util import load, drop
-from util.plot_util import plot_X_Y
 
 if __name__ == '__main__':
     housing_df = load('housing.csv')
-    plot_X_Y(housing_df, x_name="longitude", y_name="latitude", y_value_name="median_house_value")
     housing_X = complete(drop(housing_df, ["median_house_value"]))
     housing_y = housing_df["median_house_value"].copy()
-    model = RandomForestRegressor(n_estimators=10, random_state=42).fit(housing_X, housing_y)
+    m, n = housing_X.shape
+    model = MLPRegressor(hidden_layer_sizes=(n, n/2), activation='relu', solver='adam',
+                         learning_rate_init=0.001, random_state=42, max_iter=2000).fit(housing_X, housing_y)
     compare(housing_X, housing_y, model, 100)

@@ -3,11 +3,10 @@ from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 import tensorflow.compat.v1 as tf
 
-from util.dm_util import create_dx
-from util.df_util import load_df, drop_df
+from util.df_util import complete
+from util.df_util import load, drop
 
 tf.disable_v2_behavior()
-
 
 n_epochs = 1000
 learning_rate = 0.01
@@ -31,13 +30,12 @@ def housing_compare(model_path, theta, housing_X, housing_y, sample_size):
 
 
 if __name__ == '__main__':
-    housing_df = load_df('housing.csv')
-    housing_X = create_dx(drop_df(housing_df, ["median_house_value"]))
+    housing_df = load('housing.csv')
+    housing_X = complete(drop(housing_df, ["median_house_value"]))
     housing_y = housing_df["median_house_value"].copy()
     m, n = housing_X.shape
 
-    scaler = StandardScaler()
-    scaled_housing_data = scaler.fit_transform(housing_X)
+    scaled_housing_data = StandardScaler().fit_transform(housing_X)
     scaled_housing_data_plus_bias = np.c_[np.ones((m, 1)), scaled_housing_data]
 
     X = tf.constant(scaled_housing_data_plus_bias, dtype=tf.float32, name="X")
@@ -48,8 +46,6 @@ if __name__ == '__main__':
     mse = tf.reduce_mean(tf.square(error), name="mse")
     gradients = 2/m * tf.matmul(tf.transpose(X), error)
     training_op = tf.assign(theta, theta - learning_rate * gradients)
-    # optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate,momentum=0.9)
-    # training_op = optimizer.minimize(mse)
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
