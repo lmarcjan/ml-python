@@ -1,7 +1,7 @@
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestRegressor
 
-from util.df_util import compare, complete
+from util.df_util import compare_sample, complete
 from util.df_util import load, drop
 
 if __name__ == '__main__':
@@ -11,4 +11,4 @@ if __name__ == '__main__':
     pca = PCA(n_components=4)
     housing_X_reduced = pca.fit_transform(housing_X)
     model = RandomForestRegressor(n_estimators=10, random_state=42).fit(housing_X_reduced, housing_y)
-    compare(housing_X_reduced, housing_y, model, 100)
+    compare_sample(housing_X_reduced, housing_y, model, 100)

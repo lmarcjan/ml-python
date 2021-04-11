@@ -24,7 +24,7 @@ def complete(X):
     return SimpleImputer(strategy="median").fit_transform(X)
 
 
-def compare(X, y, model, sample_size):
+def compare_sample(X, y, model, sample_size):
     indices = np.random.choice(len(X), sample_size)
     labels = y[indices]
     print("Labels: " + str(np.array(labels)))
