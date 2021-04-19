@@ -14,5 +14,5 @@ if __name__ == '__main__':
         keras.layers.Dense(units=1),
     ])
     model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.02))
-    model.fit(housing_X, housing_y, 300)
+    model.fit(housing_X, housing_y, epochs=300)
     compare_sample(housing_X, housing_y, model, 100)
