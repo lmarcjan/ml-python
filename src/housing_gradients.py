@@ -55,6 +55,6 @@ if __name__ == '__main__':
             if epoch % 100 == 0:
                 print("Epoka", epoch, "MSE =", mse.eval())
             sess.run(training_op)
-        saver.save(sess, "./model/housing_tf.ckpt")
+        saver.save(sess, "./model/housing_gradients.ckpt")
 
-    housing_compare("./model/housing_tf.ckpt", theta, housing_X, housing_y, 10)
+    housing_compare("./model/housing_gradients.ckpt", theta, housing_X, housing_y, 10)
