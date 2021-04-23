@@ -5,6 +5,7 @@ import data
 import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 
 
@@ -22,6 +23,10 @@ def drop(X, dropped_columns):
 
 def complete(X):
     return SimpleImputer(strategy="median").fit_transform(X)
+
+
+def scale(X):
+    return StandardScaler().fit_transform(X)
 
 
 def compare_sample(X, y, model, sample_size):

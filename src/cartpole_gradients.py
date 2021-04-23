@@ -79,7 +79,7 @@ if __name__ == '__main__':
     with tf.Session() as sess:
         init.run()
         for iteration in range(n_iterations):
-            print("\rIteration: {}".format(iteration), end="")
+            print(f"\rIteration: {format(iteration)}", end="")
             all_rewards = []
             all_gradients = []
             for game in range(n_games_per_update):
