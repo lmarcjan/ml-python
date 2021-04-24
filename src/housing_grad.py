@@ -11,21 +11,21 @@ n_epochs = 1000
 learning_rate = 0.01
 
 
-def housing_compare(model_path, theta, housing_X, housing_y, sample_set):
-    indices = np.random.choice(len(housing_X), sample_set)
-    labels = housing_y[indices]
-    print(np.array(labels))
+def compare_sample(X, y, theta, model_path, sample_set):
+    indices = np.random.choice(len(X), sample_set)
+    labels = y[indices]
+    print("Labels: " + str(np.array(labels)))
     with tf.Session() as sess:
         saver.restore(sess, model_path)
         best_theta = theta.eval().flatten()
-        sample_set = housing_X[indices]
+        sample_set = X[indices]
         housing_pred = []
         for sample in sample_set:
-            y_pred = best_theta[0] + np.dot(best_theta[1:9], sample.flatten())
+            y_pred = np.dot(best_theta, sample.flatten())
             housing_pred.append(y_pred)
-        print(housing_pred)
+        print("Predicted: " + str(housing_pred))
         rmse = np.sqrt(mean_squared_error(labels, housing_pred))
-        print(rmse)
+        print("RMSE: " + str(rmse))
 
 
 if __name__ == '__main__':
@@ -54,6 +54,6 @@ if __name__ == '__main__':
             if epoch % 100 == 0:
                 print(f"\rEpoka {epoch}, MSE = {mse.eval()}", end="")
             sess.run(training_op)
-        saver.save(sess, "./model/housing_gradients.ckpt")
+        saver.save(sess, "./model/housing_grad.ckpt")
 
-    housing_compare("./model/housing_gradients.ckpt", theta, housing_X, housing_y, 10)
+    compare_sample(scaled_housing_data_plus_bias, housing_y, theta, "./model/housing_grad.ckpt", 10)
