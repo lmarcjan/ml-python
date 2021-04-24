@@ -11,16 +11,16 @@ n_epochs = 1000
 learning_rate = 0.01
 
 
-def housing_compare(model_path, theta, housing_X, housing_y, sample_size):
-    indices = np.random.choice(len(housing_X), sample_size)
+def housing_compare(model_path, theta, housing_X, housing_y, sample_set):
+    indices = np.random.choice(len(housing_X), sample_set)
     labels = housing_y[indices]
     print(np.array(labels))
     with tf.Session() as sess:
         saver.restore(sess, model_path)
         best_theta = theta.eval().flatten()
-        sample_size = housing_X[indices]
+        sample_set = housing_X[indices]
         housing_pred = []
-        for sample in sample_size:
+        for sample in sample_set:
             y_pred = best_theta[0] + np.dot(best_theta[1:9], sample.flatten())
             housing_pred.append(y_pred)
         print(housing_pred)
