@@ -14,14 +14,14 @@ discount_rate = 0.95
 
 def render_policy_net(model_path, action, X, n_max_steps=1000):
     frames = []
-    obs = env.reset()
+    state = env.reset()
     with tf.Session() as sess:
         saver.restore(sess, model_path)
         for step in range(n_max_steps):
             img = env.render(mode="rgb_array")
             frames.append(img)
-            action_val = action.eval(feed_dict={X: obs.reshape(1, n_inputs)})
-            obs, reward, done, info = env.step(action_val[0][0])
+            action_val = action.eval(feed_dict={X: state.reshape(1, n_inputs)})
+            state, reward, done, _ = env.step(action_val[0][0])
             if done:
                 break
     env.close()
@@ -85,10 +85,10 @@ if __name__ == '__main__':
             for game in range(n_games_per_update):
                 current_rewards = []
                 current_gradients = []
-                obs = env.reset()
+                state = env.reset()
                 for step in range(n_max_steps):
-                    action_val, gradients_val = sess.run([action, gradients], feed_dict={X: obs.reshape(1, n_inputs)})
-                    obs, reward, done, info = env.step(action_val[0][0])
+                    action_val, gradients_val = sess.run([action, gradients], feed_dict={X: state.reshape(1, n_inputs)})
+                    state, reward, done, _ = env.step(action_val[0][0])
                     current_rewards.append(reward)
                     current_gradients.append(gradients_val)
                     if done:

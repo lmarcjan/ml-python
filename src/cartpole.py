@@ -4,8 +4,8 @@ from util.plot_util import plot_animation
 env = gym.make('CartPole-v0')
 
 
-def naive_policy(obs):
-    position, velocity, angle, angular_velocity = obs
+def naive_policy(state):
+    position, velocity, angle, angular_velocity = state
     if angle < 0:
         return 0
     else:
@@ -14,12 +14,12 @@ def naive_policy(obs):
 
 def render_policy(n_max_steps=1000):
     frames = []
-    obs = env.reset()
+    state = env.reset()
     for step in range(n_max_steps):
         img = env.render(mode="rgb_array")
         frames.append(img)
-        action_val = naive_policy(obs)
-        obs, reward, done, info = env.step(action_val)
+        action_val = naive_policy(state)
+        state, reward, done, _ = env.step(action_val)
         if done:
             break
     env.close()
