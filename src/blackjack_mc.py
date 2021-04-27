@@ -68,15 +68,14 @@ def simulate_episode(policy):
 if __name__ == '__main__':
     n_iterations = 50000
     optimal_Q, optimal_policy = mc_control_on_policy(1, n_iterations)
-    n_episode = 10000
     n_win_opt = 0
     n_win_hold = 0
-    for _ in range(n_episode):
+    for _ in range(n_iterations):
         reward = simulate_hold_episode(18)
         if reward == 1:
             n_win_hold += 1
         reward = simulate_episode(optimal_policy)
         if reward == 1:
             n_win_opt += 1
-    print(f"Hold policy: {n_win_hold / n_episode}")
-    print(f"Optimal policy: {n_win_opt / n_episode}")
+    print(f"Hold policy: {n_win_hold / n_iterations}")
+    print(f"Optimal policy: {n_win_opt / n_iterations}")
