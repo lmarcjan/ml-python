@@ -23,12 +23,12 @@ def run_episode(Q):
     return states, actions, rewards
 
 
-def mc_control_on_policy(gamma, n_iterations):
+def mc_control_on_policy(gamma, n_episode):
     G_sum = defaultdict(float)
     N = defaultdict(int)
     Q = defaultdict(lambda: torch.empty(env.action_space.n))
-    for iteration in range(n_iterations):
-        print(f"\rIteration: {format(iteration)}", end="")
+    for episode in range(n_episode):
+        print(f"\rEpisode: {format(episode)}", end="")
         states_t, actions_t, rewards_t = run_episode(Q)
         return_t = 0
         G = {}
@@ -66,16 +66,16 @@ def simulate_episode(policy):
 
 
 if __name__ == '__main__':
-    n_iterations = 50000
-    optimal_Q, optimal_policy = mc_control_on_policy(1, n_iterations)
+    n_episode = 50000
+    optimal_Q, optimal_policy = mc_control_on_policy(1, n_episode)
     n_win_opt = 0
     n_win_hold = 0
-    for _ in range(n_iterations):
+    for _ in range(n_episode):
         reward = simulate_hold_episode(18)
         if reward == 1:
             n_win_hold += 1
         reward = simulate_episode(optimal_policy)
         if reward == 1:
             n_win_opt += 1
-    print(f"Hold policy: {n_win_hold / n_iterations}")
-    print(f"Optimal policy: {n_win_opt / n_iterations}")
+    print(f"Hold policy: {n_win_hold / n_episode}")
+    print(f"Optimal policy: {n_win_opt / n_episode}")

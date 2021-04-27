@@ -8,18 +8,18 @@ env = gym.make("CartPole-v0")
 
 n_games_per_update = 10
 n_max_steps = 1000
-n_iterations = 250
+n_episode = 250
 discount_rate = 0.95
 
 
-def render_policy_net(model_path, action, X, n_max_steps=1000):
+def render_policy(model_path, action, X, n_max_steps=1000):
     frames = []
     state = env.reset()
     with tf.Session() as sess:
         saver.restore(sess, model_path)
         for step in range(n_max_steps):
-            img = env.render(mode="rgb_array")
-            frames.append(img)
+            frame = env.render(mode="rgb_array")
+            frames.append(frame)
             action_val = action.eval(feed_dict={X: state.reshape(1, n_inputs)})
             state, reward, done, _ = env.step(action_val[0][0])
             if done:
@@ -78,8 +78,8 @@ if __name__ == '__main__':
 
     with tf.Session() as sess:
         init.run()
-        for iteration in range(n_iterations):
-            print(f"\rIteration: {format(iteration)}", end="")
+        for episode in range(n_episode):
+            print(f"\rEpisode: {format(episode)}", end="")
             all_rewards = []
             all_gradients = []
             for game in range(n_games_per_update):
@@ -106,5 +106,5 @@ if __name__ == '__main__':
             sess.run(training_op, feed_dict=feed_dict)
         saver.save(sess, "./model/cartpole_grad.ckpt")
 
-    frames = render_policy_net("./model/cartpole_grad.ckpt", action, X)
+    frames = render_policy("./model/cartpole_grad.ckpt", action, X)
     plot_animation(frames)
