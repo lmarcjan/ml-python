@@ -10,12 +10,13 @@ def plot_X_Y(df, x_name, y_name, y_value_name):
 
 def plot_animation(frames, repeat=False, interval=40):
     print("Frames: {}".format(len(frames)))
-    plt.close()
     fig = plt.figure()
     patch = plt.imshow(frames[0])
     plt.axis('off')
-    return animation.FuncAnimation(fig, update_scene, fargs=(frames, patch), frames=len(frames), repeat=repeat,
+    anim = animation.FuncAnimation(fig, update_scene, fargs=(frames, patch), frames=len(frames), repeat=repeat,
                                    interval=interval)
+    plt.close()
+    return anim
 
 
 def update_scene(num, frames, patch):
