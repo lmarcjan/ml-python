@@ -1,4 +1,3 @@
-from util.plot_util import plot_animation
 import gym
 import numpy as np
 import tensorflow.compat.v1 as tf
@@ -13,19 +12,16 @@ discount_rate = 0.95
 
 
 def render_policy(model_path, action, X, n_max_steps=1000):
-    frames = []
     state = env.reset()
     with tf.Session() as sess:
         saver.restore(sess, model_path)
         for step in range(n_max_steps):
-            frame = env.render(mode="rgb_array")
-            frames.append(frame)
+            env.render(mode="rgb_array")
             action_val = action.eval(feed_dict={X: state.reshape(1, n_inputs)})
             state, reward, done, _ = env.step(action_val[0][0])
             if done:
                 break
     env.close()
-    return frames
 
 
 def discount_rewards(rewards, discount_rate):
@@ -106,5 +102,4 @@ if __name__ == '__main__':
             sess.run(training_op, feed_dict=feed_dict)
         saver.save(sess, "./model/cartpole_grad.ckpt")
 
-    frames = render_policy("./model/cartpole_grad.ckpt", action, X)
-    plot_animation(frames)
+    render_policy("./model/cartpole_grad.ckpt", action, X)
