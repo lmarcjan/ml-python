@@ -8,19 +8,14 @@ env = gym.make('Blackjack-v0')
 
 def run_episode(Q):
     state = env.reset()
-    rewards = []
-    actions = []
-    states = []
     action = torch.randint(0, env.action_space.n, [1]).item()
     while True:
-        actions.append(action)
-        states.append(state)
-        state, reward, done, _ = env.step(action)
-        rewards.append(reward)
+        next_state, reward, done, _ = env.step(action)
+        yield state, action, reward
+        state = next_state
         if done:
             break
         action = torch.argmax(Q[state]).item()
-    return states, actions, rewards
 
 
 def mc_control_on_policy(gamma, n_episode):
@@ -29,10 +24,9 @@ def mc_control_on_policy(gamma, n_episode):
     Q = defaultdict(lambda: torch.empty(env.action_space.n))
     for episode in range(n_episode):
         print(f"\rEpisode: {format(episode)}", end="")
-        states_t, actions_t, rewards_t = run_episode(Q)
         return_t = 0
         G = {}
-        for state_t, action_t, reward_t in zip(states_t[::-1], actions_t[::-1], rewards_t[::-1]):
+        for i, (state_t, action_t, reward_t) in enumerate(run_episode(Q)):
             return_t = gamma * return_t + reward_t
             G[(state_t, action_t)] = return_t
         for state_action, return_t in G.items():
