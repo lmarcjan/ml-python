@@ -6,7 +6,7 @@ import pandas as pd
 def generate_normal():
     return pd.DataFrame({
         'Normal': np.random.normal(size=100, loc=50),
-        'Generated': [sum([np.random.rand() for j in range(0, 100)]) for i in range(0, 100)]
+        'Generated': [sum([np.random.rand() for _ in range(0, 100)]) for _ in range(0, 100)]
     })
 
 

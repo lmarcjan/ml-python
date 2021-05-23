@@ -100,6 +100,6 @@ if __name__ == '__main__':
                                           for step, reward in enumerate(rewards)], axis=0)
                 feed_dict[gradient_placeholder] = mean_gradients
             sess.run(training_op, feed_dict=feed_dict)
-        saver.save(sess, "./model/cartpole_grad.ckpt")
+        saver.save(sess, "./model/cartpole_tf_v1.ckpt")
 
-    render_policy("./model/cartpole_grad.ckpt", action, X)
+    render_policy("./model/cartpole_tf_v1.ckpt", action, X)
