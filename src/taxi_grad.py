@@ -30,7 +30,7 @@ def policy_function(state, Q):
     return action
 
 
-def q_learning(n_episode, gamma, alpha):
+def q_learning(n_episode, alpha, gamma):
     Q = defaultdict(lambda: torch.zeros(env.action_space.n))
     for episode in range(n_episode):
         print(f"\rEpisode: {format(episode)}", end="")
@@ -39,8 +39,7 @@ def q_learning(n_episode, gamma, alpha):
         while not done:
             action = policy_function(state, Q)
             next_state, reward, done, _ = env.step(action)
-            delta = reward + gamma * torch.max(Q[next_state]) - Q[state][action]
-            Q[state][action] += alpha * delta
+            Q[state][action] += alpha * (reward + gamma * torch.max(Q[next_state]) - Q[state][action])
             if done:
                 break
             state = next_state
@@ -52,9 +51,8 @@ def q_learning(n_episode, gamma, alpha):
 
 if __name__ == '__main__':
     n_episode = 1000
-    gamma = 1
     alpha = 0.4
-    optimal_Q, optimal_policy = q_learning(n_episode, gamma, alpha)
-    frames = render_policy(optimal_Q)
-    for frame in frames:
+    gamma = 1
+    optimal_Q, optimal_policy = q_learning(n_episode, alpha, gamma)
+    for frame in render_policy(optimal_Q):
         print(frame)
