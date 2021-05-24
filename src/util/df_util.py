@@ -29,11 +29,11 @@ def scale(X):
     return StandardScaler().fit_transform(X)
 
 
-def compare_sample(X, y, model, sample_set):
-    indices = np.random.choice(len(X), sample_set)
-    labels = y[indices]
+def compare_sample(X, y, model, sample_size):
+    sample_indices = np.random.choice(len(X), sample_size)
+    labels = y[sample_indices]
     print("Labels: " + str(np.array(labels)))
-    sample_set = X[indices]
+    sample_set = X[sample_indices]
     housing_pred = model.predict(sample_set)
     print("Predicted: " + str(housing_pred))
     rmse = np.sqrt(mean_squared_error(labels, housing_pred))
