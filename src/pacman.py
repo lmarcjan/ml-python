@@ -179,7 +179,7 @@ if __name__ == '__main__':
 
             # if the episode is done then print the return
             if done:
-                print('Episode: ', i, ',' 'Return', Return)
+                print(f"Episode: {i}, Return {Return}")
                 break
 
             # if the number of transistions in the replay buffer is greater than batch size
