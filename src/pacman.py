@@ -149,9 +149,6 @@ if __name__ == '__main__':
         # for each step in the episode
         for t in range(num_timesteps):
 
-            # render the environment
-            env.render()
-
             # update the time step
             time_step += 1
 
@@ -182,7 +179,7 @@ if __name__ == '__main__':
                 print(f"Episode: {i}, Return {Return}")
                 break
 
-            # if the number of transistions in the replay buffer is greater than batch size
+            # if the number of transitions in the replay buffer is greater than batch size
             # then train the network
             if len(dqn.replay_buffer) > batch_size:
                 dqn.train(batch_size)
