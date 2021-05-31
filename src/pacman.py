@@ -129,25 +129,24 @@ class DQN:
 if __name__ == '__main__':
     state_size = (88, 80, 1)
     action_size = env.action_space.n
-    num_episodes = 500
-    num_timesteps = 20000
+    n_episode = 500
+    n_max_steps = 20000
     batch_size = 8
     num_screens = 4
     dqn = DQN(state_size, action_size)
     done = False
     time_step = 0
 
-    # for each episode
-    for i in range(num_episodes):
+    for episode in range(n_episode):
 
-        # set return to 0
-        Return = 0
+        # set reward_sum to 0
+        reward_sum = 0
 
         # preprocess the game screen
         state = preprocess_state(env.reset())
 
         # for each step in the episode
-        for t in range(num_timesteps):
+        for step in range(n_max_steps):
 
             # update the time step
             time_step += 1
@@ -171,12 +170,12 @@ if __name__ == '__main__':
             # update current state to next state
             state = next_state
 
-            # update the return
-            Return += reward
+            # update reward
+            reward_sum += reward
 
-            # if the episode is done then print the return
+            # if the episode is done then print the reward
             if done:
-                print(f"Episode: {i}, Return {Return}")
+                print(f"\rEpisode: {episode}, reward {reward_sum}", end="")
                 break
 
             # if the number of transitions in the replay buffer is greater than batch size

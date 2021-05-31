@@ -75,7 +75,7 @@ if __name__ == '__main__':
     with tf.Session() as sess:
         init.run()
         for episode in range(n_episode):
-            print(f"\rEpisode: {format(episode)}", end="")
+            print(f"\rEpisode: {episode}", end="")
             all_rewards = []
             all_gradients = []
             for game in range(n_games_per_update):
