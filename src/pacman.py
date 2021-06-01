@@ -3,7 +3,7 @@ import gym
 import numpy as np
 from collections import deque
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Activation, Flatten, Conv2D, MaxPooling2D
+from tensorflow.keras.layers import Dense, Activation, Flatten, Conv2D
 from tensorflow.keras.optimizers import Adam
 
 env = gym.make("MsPacman-v0")
