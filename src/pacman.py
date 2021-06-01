@@ -139,8 +139,8 @@ if __name__ == '__main__':
 
     for episode in range(n_episode):
 
-        # set reward_sum to 0
-        reward_sum = 0
+        # set rewards to 0
+        rewards = 0
 
         # preprocess the game screen
         state = preprocess_state(env.reset())
@@ -170,12 +170,12 @@ if __name__ == '__main__':
             # update current state to next state
             state = next_state
 
-            # update reward
-            reward_sum += reward
+            # update rewards
+            rewards += reward
 
-            # if the episode is done then print the reward
+            # if the episode is done then print rewards
             if done:
-                print(f"\rEpisode: {episode}, reward {reward_sum}", end="")
+                print(f"\rEpisode: {episode}, rewards {rewards}", end="")
                 break
 
             # if the number of transitions in the replay buffer is greater than batch size
