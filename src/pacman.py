@@ -111,7 +111,7 @@ if __name__ == '__main__':
             state = next_state
             rewards += reward
             if done:
-                print(f"\rEpisode: {episode}, rewards {rewards}", end="")
+                print(f"\rEpisode: {episode}, rewards: {rewards}", end="")
                 break
             if len(dqn.replay_buffer) > batch_size:
                 dqn.train(batch_size)
