@@ -8,10 +8,8 @@ from tensorflow.keras.optimizers import Adam
 
 env = gym.make("MsPacman-v0")
 
-color = np.array([210, 164, 74]).mean()
 
-
-def preprocess_state(state):
+def preprocess_state(state, color):
     # crop and resize the image
     image = state[1:176:2, ::2]
 
@@ -32,35 +30,15 @@ def preprocess_state(state):
 
 class DQN:
     def __init__(self, state_size, action_size):
-
-        # define the state size
         self.state_size = state_size
-
-        # define the action size
         self.action_size = action_size
-
-        # define the replay buffer
         self.replay_buffer = deque(maxlen=5000)
-
-        # define the discount factor
         self.gamma = 0.9
-
-        # define the epsilon value
         self.epsilon = 0.8
-
-        # define the update rate at which we want to update the target network
         self.update_rate = 1000
-
-        # define the main network
         self.main_network = self.build_network()
-
-        # define the target network
         self.target_network = self.build_network()
-
-        # copy the weights of the main network to the target network
         self.target_network.set_weights(self.main_network.get_weights())
-
-    # Let's define a function called build_network which is essentially our DQN.
 
     def build_network(self):
         model = Sequential()
@@ -81,16 +59,8 @@ class DQN:
 
         return model
 
-    # We learned that we train DQN by randomly sampling a minibatch of transitions from the
-    # replay buffer. So, we define a function called store_transition which stores the transition information
-    # into the replay buffer
-
-    def store_transistion(self, state, action, reward, next_state, done):
+    def store_transition(self, state, action, reward, next_state, done):
         self.replay_buffer.append((state, action, reward, next_state, done))
-
-    # We learned that in DQN, to take care of exploration-exploitation trade off, we select action
-    # using the epsilon-greedy policy. So, now we define the function called epsilon_greedy
-    # for selecting action using the epsilon-greedy policy.
 
     def epsilon_greedy(self, state):
         if random.uniform(0, 1) < self.epsilon:
@@ -100,28 +70,17 @@ class DQN:
 
         return np.argmax(Q_values[0])
 
-    # train the network
     def train(self, batch_size):
-
-        # sample a mini batch of transition from the replay buffer
         minibatch = random.sample(self.replay_buffer, batch_size)
-
-        # compute the Q value using the target network
         for state, action, reward, next_state, done in minibatch:
             if not done:
                 target_Q = (reward + self.gamma * np.amax(self.target_network.predict(next_state)))
             else:
                 target_Q = reward
-
-            # compute the Q value using the main network
             Q_values = self.main_network.predict(state)
-
             Q_values[0][action] = target_Q
-
-            # train the main network
             self.main_network.fit(state, Q_values, epochs=1, verbose=0)
 
-    # update the target network weights by copying from the main network
     def update_target_network(self):
         self.target_network.set_weights(self.main_network.get_weights())
 
@@ -136,49 +95,23 @@ if __name__ == '__main__':
     dqn = DQN(state_size, action_size)
     done = False
     time_step = 0
+    color = np.array([210, 164, 74]).mean()
 
     for episode in range(n_episode):
-
-        # set rewards to 0
         rewards = 0
-
-        # preprocess the game screen
-        state = preprocess_state(env.reset())
-
-        # for each step in the episode
+        state = preprocess_state(env.reset(), color)
         for step in range(n_max_steps):
-
-            # update the time step
             time_step += 1
-
-            # update the target network
             if time_step % dqn.update_rate == 0:
                 dqn.update_target_network()
-
-            # select the action
             action = dqn.epsilon_greedy(state)
-
-            # perform the selected action
             next_state, reward, done, _ = env.step(action)
-
-            # preprocess the next state
-            next_state = preprocess_state(next_state)
-
-            # store the transition information
-            dqn.store_transistion(state, action, reward, next_state, done)
-
-            # update current state to next state
+            next_state = preprocess_state(next_state, color)
+            dqn.store_transition(state, action, reward, next_state, done)
             state = next_state
-
-            # update rewards
             rewards += reward
-
-            # if the episode is done then print rewards
             if done:
                 print(f"\rEpisode: {episode}, rewards {rewards}", end="")
                 break
-
-            # if the number of transitions in the replay buffer is greater than batch size
-            # then train the network
             if len(dqn.replay_buffer) > batch_size:
                 dqn.train(batch_size)
