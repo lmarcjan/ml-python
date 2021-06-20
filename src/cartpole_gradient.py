@@ -5,11 +5,6 @@ tf.disable_v2_behavior()
 
 env = gym.make("CartPole-v0")
 
-n_games_per_update = 10
-n_max_steps = 1000
-n_episode = 250
-discount_rate = 0.95
-
 
 def render_policy(model_path, action, X, n_max_steps=1000):
     state = env.reset()
@@ -24,17 +19,17 @@ def render_policy(model_path, action, X, n_max_steps=1000):
     env.close()
 
 
-def discount_rewards(rewards, discount_rate):
+def discount_rewards(rewards, gamma):
     discounted_rewards = np.zeros(len(rewards))
     cumulative_rewards = 0
     for step in reversed(range(len(rewards))):
-        cumulative_rewards = rewards[step] + cumulative_rewards * discount_rate
+        cumulative_rewards = rewards[step] + cumulative_rewards * gamma
         discounted_rewards[step] = cumulative_rewards
     return discounted_rewards
 
 
-def discount_and_normalize_rewards(all_rewards, discount_rate):
-    all_discounted_rewards = [discount_rewards(rewards, discount_rate) for rewards in all_rewards]
+def discount_and_normalize_rewards(all_rewards, gamma):
+    all_discounted_rewards = [discount_rewards(rewards, gamma) for rewards in all_rewards]
     flat_rewards = np.concatenate(all_discounted_rewards)
     reward_mean = flat_rewards.mean()
     reward_std = flat_rewards.std()
@@ -46,6 +41,10 @@ if __name__ == '__main__':
     n_hidden = 4
     n_outputs = 1
     learning_rate = 0.01
+    n_games_per_update = 10
+    n_max_steps = 1000
+    n_episode = 250
+    gamma = 0.95
 
     initializer = tf.variance_scaling_initializer()
     X = tf.placeholder(tf.float32, shape=[None, n_inputs])
@@ -75,7 +74,7 @@ if __name__ == '__main__':
     with tf.Session() as sess:
         init.run()
         for episode in range(n_episode):
-            print(f"\rEpisode: {format(episode)}", end="")
+            print(f"\rEpisode: {episode}", end="")
             all_rewards = []
             all_gradients = []
             for game in range(n_games_per_update):
@@ -92,7 +91,7 @@ if __name__ == '__main__':
                 all_rewards.append(current_rewards)
                 all_gradients.append(current_gradients)
 
-            all_rewards = discount_and_normalize_rewards(all_rewards, discount_rate=discount_rate)
+            all_rewards = discount_and_normalize_rewards(all_rewards, gamma=gamma)
             feed_dict = {}
             for grad_index, gradient_placeholder in enumerate(gradient_placeholders):
                 mean_gradients = np.mean([reward * all_gradients[game_index][step][grad_index]
@@ -100,6 +99,6 @@ if __name__ == '__main__':
                                           for step, reward in enumerate(rewards)], axis=0)
                 feed_dict[gradient_placeholder] = mean_gradients
             sess.run(training_op, feed_dict=feed_dict)
-        saver.save(sess, "./model/cartpole_tf_v1.ckpt")
+        saver.save(sess, "./model/cartpole_gradient.ckpt")
 
-    render_policy("./model/cartpole_tf_v1.ckpt", action, X)
+    render_policy("./model/cartpole_gradient.ckpt", action, X)

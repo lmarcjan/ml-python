@@ -7,7 +7,7 @@ from util.df_util import load, drop
 
 tf.disable_v2_behavior()
 
-n_epochs = 3000
+n_epoch = 3000
 learning_rate = 0.01
 
 
@@ -47,9 +47,9 @@ if __name__ == '__main__':
     saver = tf.train.Saver()
     with tf.Session() as sess:
         init.run()
-        for epoch in range(n_epochs):
+        for epoch in range(n_epoch):
             if epoch % 100 == 0:
-                print(f"\rEpoka {epoch}, MSE = {mse.eval()}", end="")
+                print(f"\rEpoch: {epoch}, MSE: {mse.eval()}", end="")
             sess.run(training_op)
-        saver.save(sess, "./model/housing_tf_v1.ckpt")
-    compare_sample(scaled_housing_data_plus_bias, housing_y, theta, "./model/housing_tf_v1.ckpt", 10)
+        saver.save(sess, "./model/housing_gradient.ckpt")
+    compare_sample(scaled_housing_data_plus_bias, housing_y, theta, "./model/housing_gradient.ckpt", 10)

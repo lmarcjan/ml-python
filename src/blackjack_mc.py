@@ -23,7 +23,7 @@ def mc_control_on_policy(gamma, n_episode):
     N = defaultdict(int)
     Q = defaultdict(lambda: torch.empty(env.action_space.n))
     for episode in range(n_episode):
-        print(f"\rEpisode: {format(episode)}", end="")
+        print(f"\rEpisode: {episode}", end="")
         return_t = 0
         G = {}
         for i, (state_t, action_t, reward_t) in enumerate(run_episode(Q)):

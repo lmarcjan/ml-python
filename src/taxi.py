@@ -33,7 +33,7 @@ def policy_function(state, Q):
 def q_learning(n_episode, alpha, gamma):
     Q = defaultdict(lambda: torch.zeros(env.action_space.n))
     for episode in range(n_episode):
-        print(f"\rEpisode: {format(episode)}", end="")
+        print(f"\rEpisode: {episode}", end="")
         state = env.reset()
         done = False
         while not done:
