@@ -1,3 +1,5 @@
+import os
+
 import gym
 import numpy as np
 import tensorflow.compat.v1 as tf
@@ -71,34 +73,36 @@ if __name__ == '__main__':
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 
-    with tf.Session() as sess:
-        init.run()
-        for episode in range(n_episode):
-            print(f"\rEpisode: {episode}", end="")
-            all_rewards = []
-            all_gradients = []
-            for game in range(n_games_per_update):
-                current_rewards = []
-                current_gradients = []
-                state = env.reset()
-                for step in range(n_max_steps):
-                    action_val, gradients_val = sess.run([action, gradients], feed_dict={X: state.reshape(1, n_inputs)})
-                    state, reward, done, _ = env.step(action_val[0][0])
-                    current_rewards.append(reward)
-                    current_gradients.append(gradients_val)
-                    if done:
-                        break
-                all_rewards.append(current_rewards)
-                all_gradients.append(current_gradients)
+    model_path = os.path.join('model', "cartpole_gradient.ckpt")
+    if not os.path.exists(model_path + ".index"):
+        with tf.Session() as sess:
+            init.run()
+            for episode in range(n_episode):
+                print(f"\rEpisode: {episode}", end="")
+                all_rewards = []
+                all_gradients = []
+                for game in range(n_games_per_update):
+                    current_rewards = []
+                    current_gradients = []
+                    state = env.reset()
+                    for step in range(n_max_steps):
+                        action_val, gradients_val = sess.run([action, gradients], feed_dict={X: state.reshape(1, n_inputs)})
+                        state, reward, done, _ = env.step(action_val[0][0])
+                        current_rewards.append(reward)
+                        current_gradients.append(gradients_val)
+                        if done:
+                            break
+                    all_rewards.append(current_rewards)
+                    all_gradients.append(current_gradients)
 
-            all_rewards = discount_and_normalize_rewards(all_rewards, gamma=gamma)
-            feed_dict = {}
-            for grad_index, gradient_placeholder in enumerate(gradient_placeholders):
-                mean_gradients = np.mean([reward * all_gradients[game_index][step][grad_index]
-                                          for game_index, rewards in enumerate(all_rewards)
-                                          for step, reward in enumerate(rewards)], axis=0)
-                feed_dict[gradient_placeholder] = mean_gradients
-            sess.run(training_op, feed_dict=feed_dict)
-        saver.save(sess, "./model/cartpole_gradient.ckpt")
+                all_rewards = discount_and_normalize_rewards(all_rewards, gamma=gamma)
+                feed_dict = {}
+                for grad_index, gradient_placeholder in enumerate(gradient_placeholders):
+                    mean_gradients = np.mean([reward * all_gradients[game_index][step][grad_index]
+                                              for game_index, rewards in enumerate(all_rewards)
+                                              for step, reward in enumerate(rewards)], axis=0)
+                    feed_dict[gradient_placeholder] = mean_gradients
+                sess.run(training_op, feed_dict=feed_dict)
+            saver.save(sess, model_path)
 
-    render_policy("./model/cartpole_gradient.ckpt", action, X)
+    render_policy(model_path, action, X)
