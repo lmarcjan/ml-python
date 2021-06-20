@@ -30,8 +30,8 @@ def discount_rewards(rewards, gamma):
     return discounted_rewards
 
 
-def discount_and_normalize_rewards(all_rewards, gamma):
-    all_discounted_rewards = [discount_rewards(rewards, gamma) for rewards in all_rewards]
+def discount_and_normalize_rewards(game_rewards, gamma):
+    all_discounted_rewards = [discount_rewards(rewards, gamma) for rewards in game_rewards]
     flat_rewards = np.concatenate(all_discounted_rewards)
     reward_mean = flat_rewards.mean()
     reward_std = flat_rewards.std()
@@ -79,9 +79,9 @@ if __name__ == '__main__':
             init.run()
             for episode in range(n_episode):
                 print(f"\rEpisode: {episode}", end="")
-                all_rewards = []
-                all_gradients = []
-                for game in range(n_games_per_update):
+                game_rewards = []
+                game_gradients = []
+                for game_index in range(n_games_per_update):
                     current_rewards = []
                     current_gradients = []
                     state = env.reset()
@@ -92,14 +92,14 @@ if __name__ == '__main__':
                         current_gradients.append(gradients_val)
                         if done:
                             break
-                    all_rewards.append(current_rewards)
-                    all_gradients.append(current_gradients)
+                    game_rewards.append(current_rewards)
+                    game_gradients.append(current_gradients)
 
-                all_rewards = discount_and_normalize_rewards(all_rewards, gamma=gamma)
+                game_rewards = discount_and_normalize_rewards(game_rewards, gamma=gamma)
                 feed_dict = {}
                 for grad_index, gradient_placeholder in enumerate(gradient_placeholders):
-                    mean_gradients = np.mean([reward * all_gradients[game_index][step][grad_index]
-                                              for game_index, rewards in enumerate(all_rewards)
+                    mean_gradients = np.mean([reward * game_gradients[game_index][step][grad_index]
+                                              for game_index, rewards in enumerate(game_rewards)
                                               for step, reward in enumerate(rewards)], axis=0)
                     feed_dict[gradient_placeholder] = mean_gradients
                 sess.run(training_op, feed_dict=feed_dict)
