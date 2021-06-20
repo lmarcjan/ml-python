@@ -94,8 +94,8 @@ if __name__ == '__main__':
 
             all_rewards = discount_and_normalize_rewards(all_rewards, discount_rate=discount_rate)
             feed_dict = {}
-            for var_index, gradient_placeholder in enumerate(gradient_placeholders):
-                mean_gradients = np.mean([reward * all_gradients[game_index][step][var_index]
+            for grad_index, gradient_placeholder in enumerate(gradient_placeholders):
+                mean_gradients = np.mean([reward * all_gradients[game_index][step][grad_index]
                                           for game_index, rewards in enumerate(all_rewards)
                                           for step, reward in enumerate(rewards)], axis=0)
                 feed_dict[gradient_placeholder] = mean_gradients
