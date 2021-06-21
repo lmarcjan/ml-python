@@ -21,17 +21,17 @@ def render_policy(model_path, action, X, n_max_steps=1000):
     env.close()
 
 
-def discount_rewards(rewards, gamma):
-    discounted_rewards = np.zeros(len(rewards))
+def discount_rewards(game_rewards, gamma):
+    discounted_rewards = np.zeros(len(game_rewards))
     cumulative_rewards = 0
-    for step in reversed(range(len(rewards))):
-        cumulative_rewards = rewards[step] + cumulative_rewards * gamma
+    for step in reversed(range(len(game_rewards))):
+        cumulative_rewards = game_rewards[step] + cumulative_rewards * gamma
         discounted_rewards[step] = cumulative_rewards
     return discounted_rewards
 
 
-def discount_and_normalize_rewards(game_rewards, gamma):
-    all_discounted_rewards = [discount_rewards(rewards, gamma) for rewards in game_rewards]
+def discount_and_normalize_rewards(episode_rewards, gamma):
+    all_discounted_rewards = [discount_rewards(game_rewards, gamma) for game_rewards in episode_rewards]
     flat_rewards = np.concatenate(all_discounted_rewards)
     reward_mean = flat_rewards.mean()
     reward_std = flat_rewards.std()
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     learning_rate = 0.01
     n_games_per_update = 10
     n_max_steps = 1000
-    n_episode = 250
+    n_episode = 100
     gamma = 0.95
 
     initializer = tf.variance_scaling_initializer()
@@ -79,27 +79,27 @@ if __name__ == '__main__':
             init.run()
             for episode in range(n_episode):
                 print(f"\rEpisode: {episode}", end="")
-                game_rewards = []
-                game_gradients = []
-                for game_index in range(n_games_per_update):
-                    current_rewards = []
-                    current_gradients = []
+                episode_rewards = []
+                episode_gradients = []
+                for episode_index in range(n_games_per_update):
+                    game_rewards = []
+                    game_gradients = []
                     state = env.reset()
                     for step in range(n_max_steps):
                         action_val, gradients_val = sess.run([action, gradients], feed_dict={X: state.reshape(1, n_inputs)})
                         state, reward, done, _ = env.step(action_val[0][0])
-                        current_rewards.append(reward)
-                        current_gradients.append(gradients_val)
+                        game_rewards.append(reward)
+                        game_gradients.append(gradients_val)
                         if done:
                             break
-                    game_rewards.append(current_rewards)
-                    game_gradients.append(current_gradients)
+                    episode_rewards.append(game_rewards)
+                    episode_gradients.append(game_gradients)
 
-                game_rewards = discount_and_normalize_rewards(game_rewards, gamma=gamma)
+                episode_rewards = discount_and_normalize_rewards(episode_rewards, gamma=gamma)
                 feed_dict = {}
                 for grad_index, gradient_placeholder in enumerate(gradient_placeholders):
-                    mean_gradients = np.mean([reward * game_gradients[game_index][step][grad_index]
-                                              for game_index, rewards in enumerate(game_rewards)
+                    mean_gradients = np.mean([reward * episode_gradients[episode_index][step][grad_index]
+                                              for episode_index, rewards in enumerate(episode_rewards)
                                               for step, reward in enumerate(rewards)], axis=0)
                     feed_dict[gradient_placeholder] = mean_gradients
                 sess.run(training_op, feed_dict=feed_dict)
