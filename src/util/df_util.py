@@ -45,6 +45,7 @@ def plot_corr_matrix(df, columns):
     plt.show()
 
 
-def list_corr_matrix(df, identity_column):
+def corr_matrix(df, identity_column):
     corr_matrix = df.corr()
-    corr_matrix[identity_column].sort_values(ascending=False)
+    corr_matrix = corr_matrix[identity_column].sort_values(ascending=False)
+    return corr_matrix
