@@ -28,7 +28,7 @@ def compare_sample(X, y, model, sample_size):
 def drop(df, columns):
     result = df.copy()
     for c in columns:
-        result = result.drop(df, axis=1)
+        result = result.drop(c, axis=1)
     return result
 
 
