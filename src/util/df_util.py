@@ -1,11 +1,11 @@
 import os
 import matplotlib.pyplot as plt
 from pandas.plotting import scatter_matrix
+from scipy.stats import pearsonr
+
 import data
 import pandas as pd
 import numpy as np
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 
 
@@ -21,14 +21,6 @@ def drop(X, dropped_columns):
     return result
 
 
-def complete(X):
-    return SimpleImputer(strategy="median").fit_transform(X)
-
-
-def scale(X):
-    return StandardScaler().fit_transform(X)
-
-
 def compare_sample(X, y, model, sample_size):
     sample_indices = np.random.choice(len(X), sample_size)
     labels = y[sample_indices]
@@ -40,12 +32,21 @@ def compare_sample(X, y, model, sample_size):
     print("RMSE: " + str(rmse))
 
 
-def plot_corr_matrix(df, columns):
+def plot_corr(df, columns):
     scatter_matrix(df[columns], diagonal="kde")
     plt.show()
 
 
-def get_corr_matrix(df, identity_column):
+def get_corr(df, identity_column):
     corr_matrix = df.corr()
     corr_matrix = corr_matrix[identity_column].sort_values(ascending=False)
     return corr_matrix
+
+
+def get_pvalues(df):
+    dfcols = pd.DataFrame(columns=df.columns)
+    pvalues = dfcols.transpose().join(dfcols, how='outer')
+    for r in df.columns:
+        for c in df.columns:
+            pvalues[r][c] = round(pearsonr(df[r], df[c])[1], 4)
+    return pvalues

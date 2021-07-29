@@ -1,11 +1,11 @@
 import tensorflow as tf
 from tensorflow import keras
-from util.df_util import compare_sample, complete
+from util.df_util import compare_sample
 from util.df_util import load, drop
 
 if __name__ == '__main__':
     housing_df = load('housing.csv')
-    housing_X = complete(drop(housing_df, ["median_house_value"]))
+    housing_X = drop(housing_df, ["median_house_value"]).fillna(0)
     housing_y = housing_df["median_house_value"].copy()
     m, n = housing_X.shape
     model = keras.Sequential([

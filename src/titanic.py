@@ -1,6 +1,6 @@
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 
-from util.df_util import compare_sample, complete
+from util.df_util import compare_sample
 from util.df_util import load, drop
 import numpy as np
 
@@ -18,7 +18,7 @@ def prepare_df(titanic_df):
 if __name__ == '__main__':
     titanic_df = load('titanic.csv')
     prepare_df(titanic_df)
-    titanic_X = complete(drop(titanic_df, ["Survived"]))
+    titanic_X = drop(titanic_df, ["Survived"]).fillna(0)
     titanic_y = titanic_df["Survived"].copy()
     model = DecisionTreeClassifier(criterion='gini', max_depth=3, min_samples_split=2).fit(titanic_X, titanic_y)
     export_graphviz(model, out_file='model/tree.dot', feature_names=['Pclass', 'Male', 'Age', 'SibSp', 'Parch', 'Embarked'],

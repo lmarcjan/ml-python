@@ -1,8 +1,7 @@
 import numpy as np
 from sklearn.metrics import mean_squared_error
 import tensorflow.compat.v1 as tf
-
-from util.df_util import complete, scale
+from sklearn.preprocessing import StandardScaler
 from util.df_util import load, drop
 
 tf.disable_v2_behavior()
@@ -30,10 +29,10 @@ def compare_sample(X, y, theta, model_path, sample_set):
 
 if __name__ == '__main__':
     housing_df = load('housing.csv')
-    housing_X = complete(drop(housing_df, ["median_house_value"]))
+    housing_X = drop(housing_df, ["median_house_value"]).fillna(0)
     housing_y = housing_df["median_house_value"].copy()
     m, n = housing_X.shape
-    scaled_housing_data = scale(housing_X)
+    scaled_housing_data = StandardScaler().fit_transform(housing_X)
     scaled_housing_data_plus_bias = np.c_[np.ones((m, 1)), scaled_housing_data]
     X = tf.constant(scaled_housing_data_plus_bias, dtype=tf.float32, name="X")
     y = tf.constant(np.array(housing_y).reshape(-1, 1), dtype=tf.float32, name="y")
