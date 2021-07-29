@@ -14,13 +14,6 @@ def load(name):
     return pd.read_csv(data_path)
 
 
-def drop(X, dropped_columns):
-    result = X.copy()
-    for c in dropped_columns:
-        result = result.drop(c, axis=1)
-    return result
-
-
 def compare_sample(X, y, model, sample_size):
     sample_indices = np.random.choice(len(X), sample_size)
     labels = y[sample_indices]
@@ -30,6 +23,13 @@ def compare_sample(X, y, model, sample_size):
     print("Predicted: " + str(housing_pred))
     rmse = np.sqrt(mean_squared_error(labels, housing_pred))
     print("RMSE: " + str(rmse))
+
+
+def drop(df, columns):
+    result = df.copy()
+    for c in columns:
+        result = result.drop(df, axis=1)
+    return result
 
 
 def plot_corr(df, columns):
