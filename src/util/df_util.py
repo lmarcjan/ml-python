@@ -38,7 +38,7 @@ def plot_corr(df, columns):
 
 
 def get_corr(df, identity_column):
-    corr_matrix = df.corr()
+    corr_matrix = df.corr(method='spearman')
     corr_matrix = corr_matrix[identity_column].sort_values(ascending=False)
     return corr_matrix
 
