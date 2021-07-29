@@ -1,7 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 from pandas.plotting import scatter_matrix
-from scipy.stats import pearsonr
+from scipy.stats import spearmanr
 
 import data
 import pandas as pd
@@ -48,5 +48,5 @@ def get_pvalues(df):
     pvalues = dfcols.transpose().join(dfcols, how='outer')
     for r in df.columns:
         for c in df.columns:
-            pvalues[r][c] = round(pearsonr(df[r], df[c])[1], 4)
+            pvalues[r][c] = round(spearmanr(df[r], df[c])[1], 4)
     return pvalues
