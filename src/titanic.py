@@ -5,7 +5,7 @@ from util.df_util import load, drop
 import numpy as np
 
 
-def prepare_df(titanic_df):
+def prepare_data(titanic_df):
     mean = titanic_df["Age"].mean()
     std = titanic_df["Age"].std()
     is_null = titanic_df["Age"].isnull().sum()
@@ -17,10 +17,10 @@ def prepare_df(titanic_df):
 
 if __name__ == '__main__':
     titanic_df = load('titanic.csv')
-    prepare_df(titanic_df)
+    prepare_data(titanic_df)
     titanic_X = drop(titanic_df, ["Survived"]).fillna(0).to_numpy()
-    titanic_y = titanic_df["Survived"].copy()
+    titanic_y = titanic_df["Survived"].to_numpy()
     model = DecisionTreeClassifier(criterion='gini', max_depth=3, min_samples_split=2).fit(titanic_X, titanic_y)
     export_graphviz(model, out_file='model/tree.dot', feature_names=['Pclass', 'Male', 'Age', 'SibSp', 'Parch', 'Embarked'],
                     impurity=False, filled=True, class_names=['0', '1'])
-    compare_sample(titanic_X, titanic_y, model, 100)
+    compare_sample(titanic_X, titanic_y, model, 20)
