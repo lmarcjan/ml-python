@@ -14,13 +14,13 @@ def load(name):
     return pd.read_csv(data_path)
 
 
-def compare_sample(X, y, model, sample_size):
+def eval_sample(X, y, model, sample_size):
     sample_indices = np.random.choice(len(X), sample_size)
     labels = y[sample_indices]
-    print("Labels: " + str(np.array(labels)))
+    #print("Labels: " + str(np.array(labels)))
     sample_set = X[sample_indices]
     housing_pred = model.predict(sample_set)
-    print("Predicted: " + str(housing_pred))
+    #print("Predicted: " + str(housing_pred))
     rmse = np.sqrt(mean_squared_error(labels, housing_pred))
     print("RMSE: " + str(rmse))
 

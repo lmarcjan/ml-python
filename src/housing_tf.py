@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
-from util.df_util import compare_sample
+from util.df_util import eval_sample
 from util.df_util import load, drop
 
 if __name__ == '__main__':
@@ -15,4 +15,4 @@ if __name__ == '__main__':
     ])
     model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.02))
     model.fit(housing_X, housing_y, epochs=30)
-    compare_sample(housing_X, housing_y, model, 100)
+    eval_sample(housing_X, housing_y, model, 100)
