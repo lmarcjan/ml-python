@@ -30,7 +30,7 @@ def compare_sample(X, y, theta, model_path, sample_set):
 if __name__ == '__main__':
     housing_df = load('housing.csv')
     housing_X = drop(housing_df, ["median_house_value"]).fillna(0).to_numpy()
-    housing_y = housing_df["median_house_value"].copy()
+    housing_y = housing_df["median_house_value"].to_numpy()
     m, n = housing_X.shape
     scaled_housing_data = StandardScaler().fit_transform(housing_X)
     scaled_housing_data_plus_bias = np.c_[np.ones((m, 1)), scaled_housing_data]
