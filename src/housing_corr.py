@@ -1,4 +1,5 @@
-from util.df_util import load, get_corr, get_pvalues
+from util.df_util import load
+from util.stat_util import get_corr, get_pvalues
 
 if __name__ == '__main__':
     housing_df = load('housing.csv')

@@ -1,7 +1,7 @@
+from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
-
-from util.df_util import eval_sample
 from util.df_util import load, drop
+from util.stat_util import predict_error
 import numpy as np
 
 
@@ -18,9 +18,13 @@ def prepare_data(titanic_df):
 if __name__ == '__main__':
     titanic_df = load('titanic.csv')
     prepare_data(titanic_df)
-    titanic_X = drop(titanic_df, ["Survived"]).fillna(0).to_numpy()
-    titanic_y = titanic_df["Survived"].to_numpy()
-    model = DecisionTreeClassifier(criterion='gini', max_depth=3, min_samples_split=2).fit(titanic_X, titanic_y)
+    train, test, = train_test_split(titanic_df, random_state=42)
+    train_X = drop(train, ["Survived"]).fillna(0)
+    train_y = train["Survived"]
+    test_X = drop(test, ["Survived"]).fillna(0)
+    test_y = test["Survived"]
+    model = DecisionTreeClassifier(criterion='gini', max_depth=3, min_samples_split=2).fit(train_X.to_numpy(), train_y.to_numpy())
+    predict_error(model, train_X, train_y, "Train")
+    predict_error(model, test_X, test_y, "Test")
     export_graphviz(model, out_file='model/tree.dot', feature_names=['Pclass', 'Male', 'Age', 'SibSp', 'Parch', 'Embarked'],
                     impurity=False, filled=True, class_names=['0', '1'])
-    eval_sample(titanic_X, titanic_y, model, 100)
