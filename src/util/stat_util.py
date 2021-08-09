@@ -5,6 +5,7 @@ from pandas.plotting import scatter_matrix
 from scipy.stats import spearmanr
 import pandas as pd
 from sklearn.metrics import f1_score, recall_score, precision_score, confusion_matrix, classification_report
+import seaborn as sns
 
 
 def predict_error(model, X, y, prefix=""):
@@ -30,10 +31,13 @@ def plot_corr(df, columns):
     plt.show()
 
 
-def get_corr(df, identity_column):
+def get_corr_target(df, target):
     corr_matrix = df.corr(method='spearman')
-    corr_matrix = corr_matrix[identity_column].sort_values(ascending=False)
-    return corr_matrix
+    sns.heatmap(corr_matrix, vmin=-1., vmax=1., annot=True, fmt='.2f', cmap="YlGnBu", cbar=True, linewidths=0.5)
+    plt.title("spearman correlation")
+    plt.show()
+    corr_target = corr_matrix[target].sort_values(ascending=False).to_frame()
+    return corr_target
 
 
 def get_pvalues(df):
