@@ -1,7 +1,6 @@
 import numpy as np
 from sklearn import metrics
 import matplotlib.pyplot as plt
-from pandas.plotting import scatter_matrix
 from scipy.stats import spearmanr
 import pandas as pd
 from sklearn.metrics import f1_score, recall_score, precision_score, confusion_matrix, classification_report
@@ -24,11 +23,6 @@ def predict_score(clf, X, y, prefix=""):
     print(f'{prefix} Confusion Matrix:\n', cm)
     cr = classification_report(y, y_pred)
     print(f'{prefix} Classification Report:\n', cr)
-
-
-def plot_corr(df, columns):
-    scatter_matrix(df[columns], diagonal="kde")
-    plt.show()
 
 
 def get_corr_target(df, target):
