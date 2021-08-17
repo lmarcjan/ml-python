@@ -10,8 +10,8 @@ n_epoch = 3000
 learning_rate = 0.01
 
 
-def compare_sample(X, y, theta, model_path, sample_set):
-    indices = np.random.choice(len(X), sample_set)
+def compare_sample(X, y, theta, model_path, sample_size):
+    indices = np.random.choice(len(X), sample_size)
     labels = y[indices]
     print("Labels: " + str(np.array(labels)))
     with tf.Session() as sess:
