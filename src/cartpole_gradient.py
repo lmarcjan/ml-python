@@ -5,10 +5,11 @@ import numpy as np
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 
-env = gym.make("CartPole-v0")
+
+env = gym.make('CartPole-v0')
 
 
-def render_policy(model_path, action, X, n_max_steps=1000):
+def render_policy(env, model_path, action, X, n_max_steps=1000):
     state = env.reset()
     with tf.Session() as sess:
         saver.restore(sess, model_path)
@@ -105,4 +106,4 @@ if __name__ == '__main__':
                 sess.run(training_op, feed_dict=feed_dict)
             saver.save(sess, model_path)
 
-    render_policy(model_path, action, X)
+    render_policy(gym.wrappers.Monitor(env, 'recording', force=True), model_path, action, X)
