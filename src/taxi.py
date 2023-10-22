@@ -7,19 +7,15 @@ env = gym.make('Taxi-v3')
 epsilon = 0.1
 
 
-def render_policy(policy):
-    frames = []
+def render_policy(env, policy):
     state = env.reset()
     while True:
         frame = env.render()
-        if frame:
-            frames.append(frame)
         action_val = torch.argmax(policy[state]).item()
         state, reward, done, _ = env.step(action_val)
         if done:
             break
     env.close()
-    return frames
 
 
 def policy_function(state, Q):
@@ -54,5 +50,4 @@ if __name__ == '__main__':
     alpha = 0.4
     gamma = 1
     optimal_Q, optimal_policy = q_learning(n_episode, alpha, gamma)
-    for frame in render_policy(optimal_Q):
-        print(frame)
+    render_policy(gym.wrappers.Monitor(env, 'recording', force=True), optimal_Q)

@@ -11,7 +11,7 @@ def naive_policy(state):
         return 1
 
 
-def render_policy(n_max_steps=1000):
+def render_policy(env, n_max_steps=1000):
     state = env.reset()
     for step in range(n_max_steps):
         env.render(mode="rgb_array")
@@ -23,4 +23,4 @@ def render_policy(n_max_steps=1000):
 
 
 if __name__ == '__main__':
-    render_policy()
+    render_policy(gym.wrappers.Monitor(env, 'recording', force=True))
