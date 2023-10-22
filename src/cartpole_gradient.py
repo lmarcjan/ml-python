@@ -106,4 +106,4 @@ if __name__ == '__main__':
                 sess.run(training_op, feed_dict=feed_dict)
             saver.save(sess, model_path)
 
-    render_policy(gym.wrappers.Monitor(env, 'recording', force=True), model_path, action, X)
+    render_policy(gym.wrappers.RecordVideo(env, 'video'), model_path, action, X)

@@ -50,4 +50,4 @@ if __name__ == '__main__':
     alpha = 0.4
     gamma = 1
     optimal_Q, optimal_policy = q_learning(n_episode, alpha, gamma)
-    render_policy(gym.wrappers.Monitor(env, 'recording', force=True), optimal_Q)
+    render_policy(env, optimal_Q)

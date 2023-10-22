@@ -23,4 +23,4 @@ def render_policy(env, n_max_steps=1000):
 
 
 if __name__ == '__main__':
-    render_policy(gym.wrappers.Monitor(env, 'recording', force=True))
+    render_policy(gym.wrappers.RecordVideo(env, 'video'))
