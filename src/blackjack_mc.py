@@ -3,7 +3,7 @@ from collections import defaultdict
 import gym
 import torch
 
-env = gym.make('Blackjack-v0')
+env = gym.make('Blackjack-v1')
 
 
 def run_episode(Q):
