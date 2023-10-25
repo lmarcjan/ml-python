@@ -14,5 +14,5 @@ if __name__ == '__main__':
     test_X = drop(test, ["median_house_value"]).fillna(0)
     test_y = test["median_house_value"]
     model = RandomForestRegressor(n_estimators=10, random_state=42).fit(train_X.to_numpy(), train_y.to_numpy())
-    predict_error(model, train_X, train_y, "Train")
-    predict_error(model, test_X, test_y, "Test")
+    predict_error(model.predict(train_X), train_y, "Train")
+    predict_error(model.predict(test_X), test_y, "Test")

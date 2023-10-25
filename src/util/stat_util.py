@@ -7,15 +7,13 @@ from sklearn.metrics import f1_score, recall_score, precision_score, confusion_m
 import seaborn as sns
 
 
-def predict_error(model, X, y, prefix=""):
-    y_pred = model.predict(X)
+def predict_error(y_pred, y, prefix=""):
     print(f'{prefix} Mean Absolute Error:', round(metrics.mean_absolute_error(y, y_pred), 4))
     print(f'{prefix} Mean Squared Error:', round(metrics.mean_squared_error(y, y_pred), 4))
     print(f'{prefix} Root Mean Squared Error:', round(np.sqrt(metrics.mean_squared_error(y, y_pred)), 4))
 
 
-def predict_score(clf, X, y, prefix=""):
-    y_pred = clf.predict(X)
+def predict_score(y_pred, y, prefix=""):
     print(f'{prefix} Precision Score:', round(precision_score(y, y_pred, average='weighted'), 4))
     print(f'{prefix} Recall Score:', round(recall_score(y, y_pred, average='weighted'), 4))
     print(f'{prefix} F1 Score:', round(f1_score(y, y_pred, average='weighted'), 4))

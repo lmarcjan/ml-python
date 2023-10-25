@@ -19,5 +19,5 @@ if __name__ == '__main__':
     ])
     model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.02))
     model.fit(train_X, train_y, epochs=30)
-    predict_error(model, train_X, train_y, "Train")
-    predict_error(model, test_X, test_y, "Test")
+    predict_error(model.predict(train_X), train_y, "Train")
+    predict_error(model.predict(test_X), test_y, "Test")
