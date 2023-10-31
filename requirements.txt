@@ -11,7 +11,6 @@ seaborn~=0.13.0
 pygame==2.5.2
 gym[accept-rom-license]==0.23.1
 gymnasium[atari]==0.29.1
-box2d==2.3.10
 tensorflow[and-cuda]==2.13.0
 transformers~=4.30.0
 sentencepiece~=0.1.99
