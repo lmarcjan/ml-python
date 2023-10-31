@@ -1,13 +1,14 @@
 import torch
-from transformers import LlamaTokenizer, AutoModelForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model_name = "h2oai/h2ogpt-4096-llama2-7b-chat"
+model_name = "gpt2"
 
 if __name__ == '__main__':
 
-    tokenizer = LlamaTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float32, trust_remote_code=True)
-
-    prompt = "My name is Julien and I like to"
-    input_ids = tokenizer(prompt, return_tensors="pt").input_ids
-    outputs = model(input_ids=input_ids)
+    torch_device = "cuda" if torch.cuda.is_available() else "cpu"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True)
+    text = "What is love?"
+    encoded_input = tokenizer(text, return_tensors='pt')
+    output = model(**encoded_input)
+    print("Output:\n\n"+tokenizer.decode(output.logits[0], skip_special_tokens=True))
