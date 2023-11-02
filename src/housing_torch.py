@@ -5,6 +5,8 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 
 from sklearn.model_selection import train_test_split
+
+from util.device_util import get_torch_device
 from util.df_util import load, drop
 from util.stat_util import predict_error
 
@@ -29,8 +31,7 @@ if __name__ == '__main__':
     test_y = test["median_house_value"]
     m, n = train_X.shape
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+    device = get_torch_device()
     train_X_tensor = torch.tensor(train_X.to_numpy()).float().to(device)
     train_y_tensor = torch.tensor(train_y.to_numpy()).float().reshape(-1, 1).to(device)
 
